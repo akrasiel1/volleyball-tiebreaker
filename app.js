@@ -14,35 +14,29 @@ const resetBtn = document.querySelector('#reset');
 let winningScore = 15;
 let isGameOver = false;
 
-
-home.button.addEventListener('click', () => {
+const updateScores = (main, opponent) => {
     if(!isGameOver) {
-        home.baseScore +=1;
-        if(home.baseScore >= 14 && home.baseScore === away.baseScore) {
+        main.baseScore +=1;
+        if(main.baseScore >= 14 && main.baseScore === opponent.baseScore) {
             winningScore +=1;
         }
-        if(home.baseScore === winningScore) {
+        if(main.baseScore === winningScore) {
             isGameOver = true;
-            home.score.classList.add('text-success');
-            away.score.classList.add('text-danger');
+            main.score.classList.add('text-success');
+            opponent.score.classList.add('text-danger');
+            main.button.disabled = true;
+            opponent.button.disabled = true;
         }
-        home.score.textContent = home.baseScore;
-    }
+        main.score.textContent = main.baseScore;
+    };
+}
+
+home.button.addEventListener('click', () => {
+    updateScores(home, away);
 });
 
 away.button.addEventListener('click', () => {
-    if(!isGameOver) {
-        away.baseScore +=1;
-        if(away.baseScore >= 14 && away.baseScore === home.baseScore) {
-            winningScore +=1;
-        }
-        if(away.baseScore === winningScore) {
-            isGameOver = true;
-            away.score.classList.add('text-success');
-            home.score.classList.add('text-danger');
-        }
-        away.score.textContent = away.baseScore;
-    }
+    updateScores(away, home);
 });
 
 
@@ -55,5 +49,7 @@ resetBtn.addEventListener('click', () => {
     away.score.textContent = 0;
     home.score.classList.remove('text-success', 'text-danger');
     away.score.classList.remove('text-success', 'text-danger');
-
+    home.button.disabled = false;
+    away.button.disabled = false;
+    winningScore = 15;
 });
